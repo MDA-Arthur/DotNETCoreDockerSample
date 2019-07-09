@@ -2,8 +2,9 @@ FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /home/netcore
 
 # copy csproj and restore as distinct layers
-#COPY *.sln .
+COPY *.sln .
 COPY ECSTestSolution.ProjectWebAPI/*.csproj ./ECSTestSolution.ProjectWebAPI/
+COPY ECSTestSolution.ProjectMSTest/*.csproj ./ECSTestSolution.ProjectMSTest/
 RUN dotnet restore
 
 # copy everything else and build app
@@ -17,4 +18,4 @@ RUN cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime
 WORKDIR /home/netcore
 COPY --from=build /home/netcore/ECSTestSolution.ProjectWebAPI/build ./
 #ENTRYPOINT ["dotnet", "aspnetapp.dll"]
-ENTRYPOINT ["./ECSTestSolution.ProjectWebAPI"]
+ENTRYPOINT ["dotnet", "./ECSTestSolution.ProjectWebAPI.dll"]
